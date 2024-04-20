@@ -2,20 +2,19 @@ import React from "react";
 import { NavLink, Link } from "react-router-dom";
 import { GiShoppingBag } from "react-icons/gi";
 import { useAuth } from "../../context/auth";
-import toast from "react-hot-toast"
-
+import toast from "react-hot-toast";
 
 const Header = () => {
-  const [auth, setAuth] = useAuth()
+  const [auth, setAuth] = useAuth();
   const handleLogout = () => {
     setAuth({
       ...auth,
       user: null,
       token: "",
-    })
-    localStorage.removeItem("auth")
-    toast.success("Logout Success")
-  }
+    });
+    localStorage.removeItem("auth");
+    toast.success("Logout Success");
+  };
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -62,14 +61,32 @@ const Header = () => {
                 </>
               ) : (
                 <>
-                  <li className="nav-item">
+                  <li className="nav-item dropdown">
                     <NavLink
-                      onClick={handleLogout}
-                      to="/login"
-                      className="nav-link"
+                      className="nav-link dropdown-toggle"
+                      href="#"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
                     >
-                      Logout
+                      {auth?.user?.name}
                     </NavLink>
+                    <ul className="dropdown-menu">
+                      <li>
+                        <NavLink className="dropdown-item" to="/dashboard">
+                          Dashboard
+                        </NavLink>
+                      </li>
+                      <li className="dropdown-item">
+                        <NavLink
+                          onClick={handleLogout}
+                          to="/login"
+                          className="dropdown-item"
+                        >
+                          Logout
+                        </NavLink>
+                      </li>
+                    </ul>
                   </li>
                 </>
               )}

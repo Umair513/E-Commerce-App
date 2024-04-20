@@ -14,6 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from "./pages/auth/Login";
 import Dashboard from "./pages/user/Dashboard";
 import PrivateRoute from "./components/Routes/Private";
+import ForgotPassword from "./pages/auth/ForgotPassword";
 function App() {
   return (
     <>
@@ -24,6 +25,7 @@ function App() {
         <Route path="/policy" element={<Policy></Policy>}></Route>
         <Route path="*" element={<PageNotFound></PageNotFound>}></Route>
         <Route path="/register" element={<Register></Register>}></Route>
+        <Route path="/forgot-password" element={<ForgotPassword></ForgotPassword>}></Route>
         <Route path="/login" element={<Login></Login>}></Route>
         <Route path="/dashboard" element={<PrivateRoute></PrivateRoute>}>
           <Route path="" element={<Dashboard></Dashboard>}></Route>
