@@ -1,22 +1,24 @@
-import React, { useState } from "react";
-import AdminMenu from "../../components/Layout/AdminMenu.js";
-import Layout from "./../../components/Layout/Layout.js";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import AdminMenu from "../../components/Layout/AdminMenu";
+import Layout from "./../../components/Layout/Layout";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-
 const Products = () => {
   const [products, setProducts] = useState([]);
-  const getAllProducts = async (req, res) => {
+
+  //getall products
+  const getAllProducts = async () => {
     try {
       const { data } = await axios.get("/api/v1/product/get-product");
       setProducts(data.products);
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong");
+      toast.error("Someething Went Wrong");
     }
   };
+
+  //lifecycle method
   useEffect(() => {
     getAllProducts();
   }, []);

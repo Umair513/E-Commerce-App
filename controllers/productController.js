@@ -1,3 +1,4 @@
+import { message } from "antd";
 import productModel from "../models/productModel.js";
 import fs from "fs";
 import slugify from "slugify";
@@ -132,7 +133,7 @@ export const updateProductController = async (req, res) => {
     switch (true) {
       case !name:
         return res.status(500).send({ error: "Name is required" });
-      
+
       case !description:
         return res.status(500).send({ error: "description is required" });
       case !price:
@@ -147,9 +148,11 @@ export const updateProductController = async (req, res) => {
           .send({ error: "photo is required and should be less than 1 MB" });
     }
 
-    const products = await productModel.findByIdAndUpdate(req.params.pid, 
-        {...req.fields, slug:slugify(name)}, {new: true}
-    )
+    const products = await productModel.findByIdAndUpdate(
+      req.params.pid,
+      { ...req.fields, slug: slugify(name) },
+      { new: true }
+    );
     if (photo) {
       products.photo.data = fs.readFileSync(photo.path);
       products.photo.contentType = photo.type;
@@ -165,6 +168,68 @@ export const updateProductController = async (req, res) => {
     res.status(500).send({
       success: false,
       message: "Error in update product",
+      error,
+    });
+  }
+};
+
+export const productFilterController = async (req, res) => {
+  try {
+    const { checked, radio } = req.body;
+    let args = {};
+    if (checked.length > 0) args.category = checked;
+    if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
+    const products = await productModel.find(args);
+    res.status(200).send({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "error in filtering products",
+      error,
+    });
+  }
+};
+
+export const productCountController = async (req, res) => {
+  try {
+    const total = await productModel.find({}).estimatedDocumentCount();
+    res.status(200).send({
+      success: true,
+      total,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "error in product count",
+      error,
+    });
+  }
+};
+
+export const productListController = async (req, res) => {
+  try {
+    const perPage = 6;
+    const page = req.params.page ? req.params.page : 1;
+    const products = await productModel
+      .find({})
+      .select("-photo")
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .sort({ createdAt: -1 });
+      res.status(200).send({
+        success: true,
+        products
+      })
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "error in page list controller",
       error,
     });
   }
