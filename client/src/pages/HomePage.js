@@ -6,6 +6,7 @@ import { Checkbox } from "antd";
 import toast from "react-hot-toast";
 import { Radio } from "antd";
 import { Prices } from "../components/Prices";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const [auth, setAuth] = useAuth();
@@ -16,6 +17,8 @@ const HomePage = () => {
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
+
+  const navigate = useNavigate()
 
   const getTotal = async () => {
     try {
@@ -142,7 +145,7 @@ const HomePage = () => {
                   <h5 className="card-title">{p.name}</h5>
                   <p className="card-text">{p.description.substring(0,30)}</p>
                   <p className="card-text">$ {p.price}</p>
-                  <button className="btn btn-primary ms-2">More Details</button>
+                  <button className="btn btn-primary ms-2" onClick={() => console.log("hi")}>More Details</button>
                   <button className="btn btn-secondary ms-2">
                     Add to Cart
                   </button>
