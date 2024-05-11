@@ -7,8 +7,11 @@ import toast from "react-hot-toast";
 import { Radio } from "antd";
 import { Prices } from "../components/Prices";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/cart";
+
 
 const HomePage = () => {
+  const [cart, setCart] = useCart()
   const [auth, setAuth] = useAuth();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -146,7 +149,11 @@ const HomePage = () => {
                   <p className="card-text">{p.description.substring(0,30)}</p>
                   <p className="card-text">$ {p.price}</p>
                   <button className="btn btn-primary ms-2" onClick={() => console.log("hi")}>More Details</button>
-                  <button className="btn btn-secondary ms-2">
+                  <button className="btn btn-secondary ms-2" onClick={() => {
+                    setCart([...cart, p])
+                    localStorage.setItem("cart", JSON.stringify([...cart, p]))
+                    toast.success("Item Added to cart")
+                  }}>
                     Add to Cart
                   </button>
                 </div>
