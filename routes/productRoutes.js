@@ -16,6 +16,7 @@ import {
   updateProductController,
 } from "../controllers/productController.js";
 import formidable from "express-formidable";
+import { getAllOrdersController } from "../controllers/authController.js";
 
 const router = express.Router();
 router.post(
@@ -43,4 +44,5 @@ router.get("/search/:keyword", searchProductController)
 router.get("/product-category/:slug", productCategoryController)
 router.get("/braintree/token", braintreeTokenController)
 router.post("/braintree/payment", requireSignIn, braintreePaymentController)
+router.get("/all-orders", requireSignIn,isAdmin, getAllOrdersController)
 export default router;
